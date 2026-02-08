@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabaseClient';
 import { useAuth } from './AuthContext';
 import '../components/Notification.css';
 
-type NotificationType = 'success' | 'error' | 'info';
+type NotificationType = 'success' | 'error' | 'info' | 'broadcast';
 
 interface Notification {
     id: string;
@@ -13,9 +13,14 @@ interface Notification {
 
 interface NotificationContextType {
     showNotification: (message: string, type?: NotificationType, sound?: string) => void;
+    requestPushPermission: () => Promise<void>;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+
+// VAPID Public Key - You can generate your own using 'web-push generate-vapid-keys'
+// This is a placeholder; for production, use a persistent one.
+const VAPID_PUBLIC_KEY = 'BJ4_7Xf8A9_Z_5fT_p_5f_q_5f_8_A_9_Z_5fT_p_5f_q_5f_8_A';
 
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -34,18 +39,62 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             console.error('Error playing notification sound:', error);
         }
 
-        // Auto-dismiss after 4 seconds
+        // Auto-dismiss after 6 seconds for premium feel (longer to read bold text)
         setTimeout(() => {
             setNotifications((prev) => prev.filter((n) => n.id !== id));
-        }, 4000);
+        }, 6000);
     }, []);
 
-    // Request browser notification permissions
-    useEffect(() => {
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
+    const subscribeUserToPush = async () => {
+        if (!('serviceWorker' in navigator)) return;
+
+        try {
+            const registration = await navigator.serviceWorker.ready;
+
+            // Check if subscription already exists
+            let subscription = await registration.pushManager.getSubscription();
+
+            if (!subscription) {
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: VAPID_PUBLIC_KEY
+                });
+            }
+
+            if (subscription && user) {
+                const subJSON = subscription.toJSON();
+                const { error } = await (supabase
+                    .from('push_subscriptions') as any)
+                    .upsert({
+                        user_id: user.id,
+                        endpoint: subJSON.endpoint,
+                        p256dh: subJSON.keys?.p256dh,
+                        auth: subJSON.keys?.auth
+                    }, { onConflict: 'endpoint' });
+
+                if (error) throw error;
+                console.log('Push subscription saved to Supabase');
+            }
+        } catch (error) {
+            console.error('Error subscribing to push:', error);
         }
-    }, []);
+    };
+
+    const requestPushPermission = async () => {
+        if (!('Notification' in window)) return;
+
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            await subscribeUserToPush();
+        }
+    };
+
+    // Auto-request push on login/mount if default
+    useEffect(() => {
+        if (user && 'Notification' in window && Notification.permission === 'granted') {
+            subscribeUserToPush();
+        }
+    }, [user]);
 
     // Global real-time listener for high-priority alerts
     useEffect(() => {
@@ -67,44 +116,11 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     const { type, content, sound } = payload.new;
 
                     // Trigger Toast with Sound
-                    showNotification(content, type === 'broadcast' ? 'info' : 'success', sound);
+                    showNotification(content, type === 'broadcast' ? 'broadcast' : 'success', sound);
 
-                    // Trigger Native Browser Notification via Service Worker (PWA Standard)
-                    if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
-                        navigator.serviceWorker.ready.then(registration => {
-                            try {
-                                registration.showNotification("ClassroomX Alert", {
-                                    body: content,
-                                    icon: '/pwa-192x192.png', // Use PWA icon
-                                    badge: '/pwa-192x192.png',
-                                    tag: 'admin-broadcast',
-                                    // @ts-ignore - Standard PWA properties
-                                    renotify: true,
-                                    requireInteraction: type === 'broadcast',
-                                    vibrate: [200, 100, 200, 100, 200],
-                                    data: { url: window.location.origin }
-                                } as any);
-                            } catch (e) {
-                                console.error('SW Notification failed, falling back to window.Notification', e);
-                                // Fallback
-                                new window.Notification("ClassroomX Alert", {
-                                    body: content,
-                                    icon: '/pwa-192x192.png',
-                                    // @ts-ignore
-                                    vibrate: [200, 100, 200]
-                                } as any);
-                            }
-                        });
-                    } else if ('Notification' in window && Notification.permission === 'granted') {
-                        new window.Notification("ClassroomX Alert", {
-                            body: content,
-                            icon: '/pwa-192x192.png',
-                            // @ts-ignore
-                            vibrate: [200, 100, 200]
-                        } as any);
-                    } else {
-                        console.log('Skipping native notification. Permission:', Notification.permission);
-                    }
+                    // Note: Native Push is now handled by service worker via push events
+                    // triggered by a backend function. The Realtime broadcast here
+                    // handles in-app UI only.
                 }
             )
             .subscribe((status) => {
@@ -117,16 +133,17 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }, [user, showNotification]);
 
     return (
-        <NotificationContext.Provider value={{ showNotification }}>
+        <NotificationContext.Provider value={{ showNotification, requestPushPermission }}>
             {children}
             <div className="notification-container">
                 {notifications.map((n) => (
                     <div key={n.id} className={`notification-toast ${n.type} animate-slideUp`}>
-                        <span className="notification-icon">
+                        <div className="notification-icon">
                             {n.type === 'success' && '✅'}
                             {n.type === 'error' && '❌'}
                             {n.type === 'info' && 'ℹ️'}
-                        </span>
+                            {n.type === 'broadcast' && '📢'}
+                        </div>
                         <p className="notification-message">{n.message}</p>
                         <button className="notification-close" onClick={() => setNotifications(prev => prev.filter(item => item.id !== n.id))}>✕</button>
                     </div>
