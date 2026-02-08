@@ -23,7 +23,7 @@ self.addEventListener('push', (event) => {
     }
 
     const title = data.title || 'ClassroomX';
-    const options: NotificationOptions = {
+    const options: any = {
         body: data.body,
         icon: data.icon || '/pwa-192x192.png',
         badge: '/pwa-192x192.png',
