@@ -118,9 +118,18 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     // Trigger Toast with Sound
                     showNotification(content, type === 'broadcast' ? 'broadcast' : 'success', sound);
 
-                    // Note: Native Push is now handled by service worker via push events
-                    // triggered by a backend function. The Realtime broadcast here
-                    // handles in-app UI only.
+                    // ALSO Trigger Native System Notification (When app is open)
+                    if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(registration => {
+                            registration.showNotification("ClassroomX Alert", {
+                                body: content,
+                                icon: '/pwa-192x192.png',
+                                badge: '/pwa-192x192.png',
+                                vibrate: [200, 100, 200] as any,
+                                data: { url: window.location.origin }
+                            } as any);
+                        }).catch(err => console.error('SW not ready for local notification:', err));
+                    }
                 }
             )
             .subscribe((status) => {
@@ -135,6 +144,17 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return (
         <NotificationContext.Provider value={{ showNotification, requestPushPermission }}>
             {children}
+            {/* Debug Push Button (Only visible if permission is default) */}
+            {user && 'Notification' in window && Notification.permission === 'default' && (
+                <div style={{ position: 'fixed', bottom: '100px', right: '20px', zIndex: 10000 }}>
+                    <button
+                        onClick={requestPushPermission}
+                        style={{ background: '#3498db', color: 'white', padding: '10px 20px', borderRadius: '30px', border: 'none', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}
+                    >
+                        Enable Device Notifications 🔔
+                    </button>
+                </div>
+            )}
             <div className="notification-container">
                 {notifications.map((n) => (
                     <div key={n.id} className={`notification-toast ${n.type} animate-slideUp`}>
