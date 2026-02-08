@@ -1,0 +1,64 @@
+.teacher-letters-page {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.letters-header {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.letters-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.letter-card {
+    padding: var(--space-2xl);
+    border: 1px solid var(--color-border);
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.letter-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-lg);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.letter-card h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-primary);
+    font-family: 'Georgia', serif;
+    /* A bit of a classic look for letters */
+}
+
+.letter-content {
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.letter-content p {
+    margin-bottom: var(--space-md);
+}
+
+.letter-footer {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    text-align: right;
+}
+
+.signature {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: var(--font-size-lg);
+    color: var(--color-primary);
+}

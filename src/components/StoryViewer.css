@@ -1,0 +1,367 @@
+.story-viewer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-viewer-content {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.progress-bars {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 4px;
+    padding: 0 10px;
+    z-index: 10;
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #fff;
+    transition: width 50ms linear;
+}
+
+.story-viewer-header {
+    position: absolute;
+    top: calc(20px + env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.story-time {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    margin-left: 8px;
+}
+
+.close-viewer-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+}
+
+.close-viewer-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.story-viewer-media {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #000;
+}
+
+.story-viewer-media img,
+.story-viewer-media video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.story-caption-overlay {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: #fff;
+    text-align: center;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nav-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn:disabled {
+    opacity: 0;
+    cursor: default;
+}
+
+.nav-btn.prev {
+    left: 10px;
+}
+
+.nav-btn.next {
+    right: 10px;
+}
+
+@media (max-width: 600px) {
+    .nav-btn {
+        display: none;
+    }
+}
+
+/* Story Viewer Interaction Footer */
+.story-viewer-footer {
+    position: absolute;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+}
+
+.story-comment-form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    padding: 10px 15px;
+}
+
+.story-comment-form input {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 0.9rem;
+    width: 100%;
+    outline: none;
+}
+
+.story-comment-form input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.story-comment-form button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    opacity: 0.8;
+}
+
+.story-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.story-action-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    position: relative;
+    padding: 0;
+}
+
+.story-action-btn.active {
+    color: #ef4444;
+}
+
+.story-action-btn span {
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+/* Floating Comments */
+.floating-comments {
+    position: absolute;
+    bottom: 100px;
+    left: 15px;
+    right: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 90;
+}
+
+.floating-comment-item {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    padding: 8px 12px;
+    border-radius: 12px;
+    width: fit-content;
+    max-width: 100%;
+    animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.commenter-name {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--color-primary-light);
+    display: block;
+}
+
+.commenter-text {
+    font-size: 0.85rem;
+    color: white;
+    margin: 0;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Viewers Modal */
+.viewers-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: flex-end;
+    z-index: 200;
+}
+
+.viewers-modal {
+    width: 100%;
+    background: var(--color-surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-header button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.viewers-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.viewer-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.viewer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    overflow: hidden;
+}
+
+.viewer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

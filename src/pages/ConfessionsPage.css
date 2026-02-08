@@ -1,0 +1,78 @@
+.confessions-page {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.confessions-header {
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.confession-form {
+    margin-bottom: var(--space-2xl);
+}
+
+.form-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-md);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.confessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.confession-item {
+    border-left: 4px solid var(--color-primary);
+}
+
+.confession-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.confession-author {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.confession-content {
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.confession-reactions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.reaction-btn {
+    background: var(--color-bg-tertiary);
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.reaction-btn:hover {
+    transform: scale(1.2);
+}

@@ -1,0 +1,65 @@
+.class-insights-page {
+    width: 100%;
+}
+
+.insights-header {
+    margin-bottom: var(--space-xl);
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+}
+
+.insight-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+    justify-content: center;
+}
+
+.insight-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-xs);
+}
+
+.insight-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.insight-icon {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    font-size: 24px;
+    opacity: 0.2;
+}
+
+.chart-placeholder {
+    min-height: 300px;
+}
+
+.chart-placeholder h3 {
+    margin-bottom: var(--space-lg);
+}
+
+.simple-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+}
+
+.simple-bar {
+    height: 12px;
+    border-radius: var(--radius-full);
+    transition: width 1s ease-out;
+}

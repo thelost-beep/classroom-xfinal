@@ -1,0 +1,48 @@
+.alumni-updates {
+    width: 100%;
+}
+
+.updates-header {
+    margin-bottom: var(--space-xl);
+}
+
+.updates-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--space-xl);
+}
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.updates-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.update-item {
+    border-left: 3px solid var(--color-secondary);
+}
+
+.update-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.update-content {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+    .updates-layout {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,160 @@
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    pointer-events: none;
+}
+
+.notification-toast {
+    pointer-events: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 14px 18px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Nostalgic 'Notice Board' Theme for Admin Broadcasts */
+.notification-toast.broadcast {
+    background: #2D3436;
+    /* Dark slate chalkboard color */
+    border: 3px solid #636E72;
+    border-radius: 4px;
+    /* More 'board' like */
+    box-shadow: 0 8px 0 #1E272E;
+}
+
+.notification-toast.broadcast .notification-message {
+    color: #F5F6FA;
+    font-family: 'Handlee', 'Comic Sans MS', cursive;
+    /* Chalkboard feel if font exists */
+    font-size: 1.05rem;
+}
+
+.notification-toast.broadcast .notification-icon {
+    animation: bell-swing 2.5s ease-in-out infinite;
+    transform-origin: top center;
+    font-size: 1.5rem;
+}
+
+@keyframes bell-swing {
+    0% {
+        transform: rotate(0);
+    }
+
+    10% {
+        transform: rotate(15deg);
+    }
+
+    20% {
+        transform: rotate(-15deg);
+    }
+
+    30% {
+        transform: rotate(10deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+
+    60% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}
+
+.notification-toast.success {
+    border-left: 5px solid var(--color-success);
+}
+
+.notification-toast.error {
+    border-left: 5px solid var(--color-error);
+}
+
+.notification-toast.info {
+    border-left: 5px solid var(--color-primary);
+}
+
+.notification-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-message {
+    flex: 1;
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    line-height: 1.4;
+}
+
+.notification-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.notification-close:hover {
+    background: var(--color-error);
+    color: white;
+}
+
+/* Slide in animation */
+.animate-slideUp {
+    animation: slideUp 0.4s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .notification-container {
+        top: auto;
+        bottom: 90px;
+        right: 12px;
+        left: 12px;
+        max-width: calc(100% - 24px);
+    }
+}

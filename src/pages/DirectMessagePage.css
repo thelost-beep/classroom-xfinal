@@ -1,0 +1,285 @@
+.dm-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-primary);
+    overflow: hidden;
+}
+
+.dm-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    padding-top: calc(var(--space-md) + env(safe-area-inset-top));
+    background-color: rgba(var(--color-surface-rgb), 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background-color: var(--color-primary-light);
+    transform: translateX(-2px);
+}
+
+.chat-recipient {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.recipient-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.recipient-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recipient-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.recipient-status {
+    font-size: 0.75rem;
+    color: var(--color-success);
+    margin: 0;
+    font-weight: 500;
+}
+
+.messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(var(--color-primary-rgb), 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(var(--color-secondary-rgb), 0.03) 0px, transparent 50%);
+}
+
+.message-wrapper {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: 2px;
+    max-width: 85%;
+    animation: messageSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.message-wrapper.own {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+    align-self: flex-end;
+    margin-bottom: 4px;
+}
+
+.message-bubble {
+    padding: 10px 16px;
+    border-radius: 18px;
+    position: relative;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.message-wrapper.other .message-bubble {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--color-border);
+}
+
+.message-wrapper.own .message-bubble {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 15px rgba(var(--color-primary-rgb), 0.25);
+}
+
+.message-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.message-time {
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+
+.delivery-status {
+    display: flex;
+    align-items: center;
+}
+
+.status-icon {
+    opacity: 0.5;
+}
+
+.status-icon.read {
+    color: #38bdf8;
+    /* Light blue for read */
+    opacity: 1;
+}
+
+.message-wrapper.own .message-time {
+    text-align: right;
+}
+
+.message-input-area {
+    padding: var(--space-md) var(--space-lg);
+    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
+    background-color: rgba(var(--color-surface-rgb), 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.input-wrapper {
+    flex: 1;
+    background-color: var(--color-bg-tertiary);
+    border-radius: 24px;
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    transition: all 0.2s;
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface);
+    box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.input-wrapper textarea {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    resize: none;
+    font-family: inherit;
+    max-height: 120px;
+    outline: none;
+}
+
+.send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    opacity: 0.4;
+    transform: scale(0.9);
+}
+
+.send-btn.active {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.input-action-btn {
+    color: var(--color-text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xs);
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.input-action-btn:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+/* Mobile specific fixes */
+@media (max-width: 640px) {
+    .dm-header {
+        padding: var(--space-sm) var(--space-md);
+        padding-top: calc(10px + env(safe-area-inset-top));
+    }
+
+    .messages-container {
+        padding: var(--space-md);
+    }
+
+    .message-bubble {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+}

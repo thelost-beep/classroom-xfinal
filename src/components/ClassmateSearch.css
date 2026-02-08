@@ -1,0 +1,56 @@
+/* =========================================
+   VIEW PROFILE — PROFESSIONAL CTA FIX
+========================================= */
+
+/* Generic safe targeting */
+.view-profile,
+.search-item a,
+.card a {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.85;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        color 0.15s ease;
+}
+
+/* Hover = intent */
+.view-profile:hover,
+.search-item a:hover,
+.card a:hover {
+    opacity: 1;
+    color: var(--color-primary);
+    transform: translateX(2px);
+}
+
+/* Optional arrow using CSS (no HTML change) */
+.view-profile::after,
+.search-item a::after,
+.card a::after {
+    content: '→';
+    font-size: 0.8rem;
+    transition: transform 0.15s ease;
+}
+
+.view-profile:hover::after,
+.search-item a:hover::after,
+.card a:hover::after {
+    transform: translateX(2px);
+}
+
+
+/* Card footer action alignment */
+.card {
+    position: relative;
+}
+
+.card .view-profile {
+    margin-top: 6px;
+    align-self: flex-start;
+}
