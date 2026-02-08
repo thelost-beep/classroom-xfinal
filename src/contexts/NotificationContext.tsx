@@ -69,22 +69,39 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     // Trigger Toast with Sound
                     showNotification(content, type === 'broadcast' ? 'info' : 'success', sound);
 
-                    // Trigger Native Browser Notification
-                    if ('Notification' in window && Notification.permission === 'granted') {
-                        console.log('Spawning native notification...');
-                        const notification = new window.Notification("ClassroomX Alert", {
+                    // Trigger Native Browser Notification via Service Worker (PWA Standard)
+                    if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(registration => {
+                            try {
+                                registration.showNotification("ClassroomX Alert", {
+                                    body: content,
+                                    icon: '/pwa-192x192.png', // Use PWA icon
+                                    badge: '/pwa-192x192.png',
+                                    tag: 'admin-broadcast',
+                                    // @ts-ignore - Standard PWA properties
+                                    renotify: true,
+                                    requireInteraction: type === 'broadcast',
+                                    vibrate: [200, 100, 200, 100, 200],
+                                    data: { url: window.location.origin }
+                                } as any);
+                            } catch (e) {
+                                console.error('SW Notification failed, falling back to window.Notification', e);
+                                // Fallback
+                                new window.Notification("ClassroomX Alert", {
+                                    body: content,
+                                    icon: '/pwa-192x192.png',
+                                    // @ts-ignore
+                                    vibrate: [200, 100, 200]
+                                } as any);
+                            }
+                        });
+                    } else if ('Notification' in window && Notification.permission === 'granted') {
+                        new window.Notification("ClassroomX Alert", {
                             body: content,
-                            icon: '/app_icon.png',
-                            tag: 'admin-broadcast',
-                            badge: '/app_icon.png',
-                            requireInteraction: type === 'broadcast',
-                            vibrate: [200, 100, 200, 100, 200]
+                            icon: '/pwa-192x192.png',
+                            // @ts-ignore
+                            vibrate: [200, 100, 200]
                         } as any);
-
-                        notification.onclick = () => {
-                            window.focus();
-                            notification.close();
-                        };
                     } else {
                         console.log('Skipping native notification. Permission:', Notification.permission);
                     }
